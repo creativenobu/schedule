@@ -6,7 +6,7 @@ export default class ListOfNumbersRange implements List<number> {
     }
 
     asArray(): Array<number> {
-        let result = [];
+        const result: number[] = [];
 
         for (let i = this._low; i <= this._high; ++i) {
             result.push(i);
