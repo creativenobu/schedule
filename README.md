@@ -8,31 +8,21 @@ Deployed in https://tsoding.github.io/schedule/
 
 ## Prerequisites
 
-- [node.js] (v8.9.4+)
-- [make]
-- [bash]
-- [coreutils]
-- [inotifywatch]
-- [python]
-- [jq]
+- [node.js] (10+)
+- npm (comes installed w/ node) or [yarn]
 
 ## Quick Start
+To run on your local machine:
+```sh
+$ npm install # yarn install
+$ npm run dev # yarn dev
 
-```console
-$ npm install
-$ make
-$ cd dist/
-$ make -j4 watch                  # for watch mode
-                                  # -j4 is required to run file watchers and http server
-                                  # in parallel
-$ <browser> http://localhost:8080/dist/
 ```
 
-[inotifywait]: https://github.com/rvoicilas/inotify-tools
+## Deploy to production
+```sh
+$ npm run build-prod # yarn build-prod
+```
+
 [node.js]: https://nodejs.org/en/
-[make]: https://www.gnu.org/software/make/
-[bash]: https://www.gnu.org/software/bash/
-[coreutils]: https://www.gnu.org/software/coreutils/coreutils.html
-[inotifywatch]: https://github.com/rvoicilas/inotify-tools
-[python]: https://www.python.org/
-[jq]: https://stedolan.github.io/jq/
+[yarn]: https://yarnpkg.com/en/
