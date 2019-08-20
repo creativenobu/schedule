@@ -4,64 +4,113 @@ const sourcemaps = require('gulp-sourcemaps');
 const browserify = require('browserify');
 const tsify = require('tsify');
 const source = require('vinyl-source-stream');
-const rimraf = require('gulp-rimraf');
+const rimraf = require('rimraf');
 const cssnano = require('cssnano');
 const uglify = require('gulp-uglify');
+const fs = require('fs');
+const connect = require('gulp-connect');
+
+// Files to let gulp know where to start
+const input = {
+  scss: 'scss/main.scss',
+  ts: 'ts/app.ts',
+  assets: [
+    'html/index.html',
+    'json/schedule.json',
+    'css/reset.css',
+  ],
+  watch: {
+    ts: 'ts/**/*.ts',
+    scss: 'scss/**/*.scss',
+    assets: [
+      'json/schedule.json',
+      'html/index.html',
+    ]
+  }
+}
+
+// Where to ouptut the front-end site
+const output = {
+  dir: 'dist',
+  css: 'main',
+  js: 'app',
+};
 
 // Static Assets Tasks
-function copyAssetsTask() {
-  return gulp.src(['html/index.html', 'json/schedule.json', 'css/reset.css'])
-    .pipe(gulp.dest('dist'));
+function copyAssetsTask(cb) {
+  gulp.src(input.assets)
+    .pipe(gulp.dest(output.dir))
+    .pipe(connect.reload());
+
+  cb();
 }
 
 // SCSS Tasks
-function scssTask() {
-  return gulp.src('scss/main.scss')
+function scssTask(cb) {
+  gulp.src(input.scss)
     .pipe(sourcemaps.init())
     .pipe(scss().on('error', scss.logError))
     .pipe(sourcemaps.write('.'))
-    .pipe(gulp.dest('dist'));
+    .pipe(gulp.dest(output.dir))
+    .pipe(connect.reload());
+
+  cb();
 }
 
-function scssMinifyTask() {
-  return gulp.src('dist/main.css')
+function scssMinifyTask(cb) {
+  gulp.src(`${output.dir}/${output.css}.css`)
     .pipe(cssnano())
-    .dest('dist/main.min.css');
+    .dest(`${output.dir}/${output.css}.min.css`);
+
+  cb();
 }
 
 // JS Tasks
-function jsTask() {
-  return browserify({
+function jsTask(cb) {
+  browserify({
     basedir: '.',
     debug: true,
-    entries: ['ts/app.ts'],
+    entries: [input.ts],
   })
     .plugin(tsify)
     .bundle()
-    .pipe(source('app.js'))
-    .pipe(gulp.dest('dist'));
+    .pipe(source(`${output.js}.js`))
+    .pipe(gulp.dest(output.dir))
+    .pipe(connect.reload());
+
+  cb();
 }
 
-function jsMinifyTask() {
-  return gulp.src('dist/app.js')
+function jsMinifyTask(cb) {
+  gulp.src(`${output.dir}/${output.js}.js`)
     .pipe(uglify())
-    .pipe(gulp.dest('dist/app.min.js'));
+    .pipe(gulp.dest(`${output.dir}/${output.js}.min.js`));
+
+  cb();
+}
+
+// web server with live reload
+function webServerTask(cb) {
+  connect.server({
+    root: output.dir,
+    livereload: true,
+  });
+
+  cb();
 }
 
 // Watch Task
-function watchTask() {
-  gulp.watch([
-    'ts/**/*.ts',
-    'scss/**/*.scss',
-    'json/schedule.json',
-    'html/index.html',
-  ], gulp.parallel(jsTask, scssTask, copyAssetsTask));
+function watchTask(cb) {
+  gulp.watch(input.watch.ts, jsTask);
+  gulp.watch(input.watch.scss, scssTask);
+  gulp.watch(input.watch.assets, copyAssetsTask);
+
+  cb();
 }
 
 // Clean Task
-function cleanTask() {
-  return gulp.src('dist/**/*', { read: false })
-    .pipe(rimraf());
+function cleanTask(cb) {
+  rimraf(output.dir, cb);
 }
 
 /**
@@ -75,7 +124,7 @@ exports.default = gulp.parallel(scssTask, jsTask, copyAssetsTask);
 exports.scss = scssTask;
 exports.js = jsTask;
 exports.clean = cleanTask;
-exports.watch = gulp.series(scssTask, jsTask, watchTask);
+exports.watch = gulp.series(scssTask, jsTask, copyAssetsTask, gulp.parallel(watchTask, webServerTask));
 exports.production = gulp.parallel(
   gulp.series(scssTask, scssMinifyTask),
   gulp.series(jsTask, jsMinifyTask),
