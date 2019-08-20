@@ -130,6 +130,16 @@
             "days": [3],
             "time": "23:00",
             "starts": "2019-06-13",
+            "ends": "2019-08-01",
+            "channel": "https://twitch.tv/tsoding"
+        },
+        {
+            "name": "Linux Magnifier App in Nim",
+            "url": "http://github.com/tsoding/boomer",
+            "description": "Magnifier (Zoomer) Application for Boomers. Works similarly to the builtin zoomer in XFCE Window Manager",
+            "days": [3],
+            "time": "23:00",
+            "starts": "2019-08-07",
             "channel": "https://twitch.tv/tsoding"
         }
     ],
