@@ -1,27 +1,20 @@
-[![Build Status](https://travis-ci.org/tsoding/schedule.svg?branch=master)](https://travis-ci.org/tsoding/schedule)
+# Schedule for Twitch Streams
+A modified version of tsoding/schedule. Front-end only single page application without any back-end. Makes all of the schedule building work yours computer problem.
 
-# Schedule for Tsoding Streams
-
-Schedule for Tsoding Streams. Front-End only Single Page Application without any Back-End. Makes all of the schedule building work yours computer problem. Saves me money on hosting.
-
-Deployed in https://tsoding.github.io/schedule/
-
-## Prerequisites
-
+## Pre-requisites
 - [node.js] (10+)
 - npm (comes installed w/ node) or [yarn]
 
 ## Quick Start
 To run on your local machine:
 ```sh
-$ npm install # yarn install
-$ npm run dev # yarn dev
-
+npm install # OR yarn install
+npm run dev # OR yarn dev
 ```
 
-## Deploy to production
+## Package for production
 ```sh
-$ npm run build-prod # yarn build-prod
+npm run build-prod # OR yarn build-prod
 ```
 
 [node.js]: https://nodejs.org/en/
