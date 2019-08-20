@@ -4,13 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "watch": "watchify -v -p tsify src/app.ts -o ./app.js",
-    "build": "browserify ./src/app.ts -p tsify --outfile ./app.js",
-    "build-prod": "browserify ./src/app.ts -p tsify -g uglifyify --outfile ./app.js",
-    "gulp:build": "gulp",
-    "gulp:build-prod": "gulp production",
-    "gulp:watch": "gulp watch",
-    "gulp:clean": "gulp clean"
+    "dev": "gulp watch",
+    "build": "gulp",
+    "build-prod": "gulp production",
+    "clean": "gulp clean"
   },
   "keywords": [],
   "author": "",
